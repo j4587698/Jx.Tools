@@ -1,0 +1,13 @@
+﻿# 默认忽略的文件
+/shelf/
+/workspace.xml
+# Rider ignored files
+/.idea.Jx.Tools.iml
+/contentModel.xml
+/modules.xml
+/projectSettingsUpdater.xml
+# 数据源本地存储已忽略文件
+/../../../../../../../../../:\Users\P0138640\source\repos\Jx.Tools\.idea\.idea.Jx.Tools\.idea/dataSources/
+/dataSources.local.xml
+# 基于编辑器的 HTTP 客户端请求
+/httpRequests/

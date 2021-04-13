@@ -1,0 +1,47 @@
+﻿@inherits LayoutComponentBase
+
+
+<Title></Title>
+<Layout SideWidth="0" IsPage="true" IsFullSide="true" IsFixedHeader="true" 
+         ShowCollapseBar="true" OnCollapsed="@OnCollapsed" Menus="@GetIconSideMenuItems()">
+    <Side>
+        <div class="layout-banner">
+            <div class="layout-title">
+                <span>常用工具</span>
+            </div>
+        </div>
+    </Side>
+    <Main>
+        <CascadingValue Value="this" IsFixed="true">
+            @Body
+        </CascadingValue>
+    </Main>
+</Layout>
+
+@code
+{
+    private IEnumerable<MenuItem> GetIconSideMenuItems()
+    {
+        List<MenuItem> items = new List<MenuItem>();
+        MenuItem menuItem = new MenuItem();
+        menuItem.Text = "文本工具";
+        menuItem.AddItem(new MenuItem()
+        {
+            Text = "文本比对",
+            Url = "/"
+        });
+        items.Add(menuItem);
+        return items;
+    }
+
+    /// <summary>
+    ///获得/设置 是否收缩侧边栏
+    /// </summary>
+    public bool IsCollapsed { get; set; }
+
+    private Task OnCollapsed(bool collapsed)
+    {
+        IsCollapsed = collapsed;
+        return Task.CompletedTask;
+    }
+}

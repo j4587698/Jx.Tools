@@ -1,0 +1,24 @@
+﻿@page "/"
+@inject TitleService TitleService
+
+<h2>文本比对</h2>
+
+<Row ItemsPerRow="ItemsPerRow.Two" RowType="RowType.FormRow">
+    <Textarea @bind-Value="@_leftText" style="height: 40vh" ></Textarea>
+    <Textarea @bind-Value="@_rightText" style="height: 40vh"></Textarea>
+</Row>
+
+@code
+{
+    private string _leftText;
+
+    private string _rightText;
+    
+    
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        TitleService.SetTitle("文本比对-常用工具集-Jx.Tools");
+    }
+}

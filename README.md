@@ -25,7 +25,7 @@
 
 ## 贡献
 
-欢迎通过PR以及[Issues](https://github.com/RichardLitt/standard-readme/issues/new)来提交您的意见与建议。
+欢迎通过PR以及[Issues](https://github.com/j4587698/Jx.Tools/issues/new)来提交您的意见与建议。
 
 ## 维护者
 

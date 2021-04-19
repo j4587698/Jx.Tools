@@ -9,11 +9,20 @@
   <ItemGroup>
     <PackageReference Include="BootstrapBlazor" Version="5.0.26-beta05" />
     <PackageReference Include="Furion" Version="1.19.3" />
+    <PackageReference Include="Masuit.Tools.Abstractions" Version="2.4.3.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Index.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Index.razor" />
   </ItemGroup>
 
 </Project>

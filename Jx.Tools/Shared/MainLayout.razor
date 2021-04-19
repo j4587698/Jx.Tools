@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
+@inject NavigationManager NavigationManager
+@inject TitleService TitleService
 
 <Title></Title>
 <Layout SideWidth="0" IsPage="true" IsFullSide="true" IsFixedHeader="true" 
@@ -7,7 +9,7 @@
     <Side>
         <div class="layout-banner">
             <div class="layout-title">
-                <span>常用工具</span>
+                <span>聚享常用工具集</span>
             </div>
         </div>
     </Side>
@@ -20,19 +22,44 @@
 
 @code
 {
+
     private IEnumerable<MenuItem> GetIconSideMenuItems()
     {
         List<MenuItem> items = new List<MenuItem>();
-        MenuItem menuItem = new MenuItem();
-        menuItem.Text = "文本工具";
+        MenuItem menuItem = new MenuItem
+        {
+            Url = "/",
+            Text = "首页",
+            Icon = "fa fa-home"
+        };
+        items.Add(menuItem);
+        menuItem = new MenuItem
+        {
+            Text = "文本工具",
+            Icon = "fa fa-file-o"
+        };
         menuItem.AddItem(new MenuItem()
         {
             Text = "文本比对",
-            Url = "/"
+            Url = "/FileCompare",
+            Icon = "fa fa-files-o"
         });
         items.Add(menuItem);
+        
+        menuItem = new MenuItem();
+        menuItem.Text = "图片工具";
+        menuItem.Icon = "fa fa-picture-o";
+        menuItem.AddItem(new MenuItem()
+        {
+            Text = "图片转Base64",
+            Icon = "fa fa-font",
+            Url = "/ImageToBase64"
+        });
+        items.Add(menuItem);
+
         return items;
     }
+
 
     /// <summary>
     ///获得/设置 是否收缩侧边栏

@@ -1,0 +1,37 @@
+﻿@page "/ImageToBase64"
+@using System.IO
+@using System.Text
+
+<h3>图片转Base64</h3>
+
+<ButtonUpload TValue="string" Accept="image/*" DisplayText="选择要上传的文件" OnChange="@Upload" ShowLabel="true"></ButtonUpload>
+
+<Textarea style="height: 40vh" @bind-Value="@_base64String" readonly></Textarea>
+
+@code {
+
+    private string _base64String;
+
+    private List<UploadFile> DefaultFormatFileList { get; set; } = new List<UploadFile>();
+
+    private async Task Upload(UploadFile arg)
+    {
+        if (".jpg;.png;.bmp;.gif;.jpeg".Split(';').Any(x => x == Path.GetExtension(arg.OriginFileName)))
+        {
+            var stream = arg.File?.OpenReadStream();
+            if (stream == null)
+            {
+                return;
+            }
+            var length = stream.Length;
+            byte[] bytes = new byte[length];
+            await stream.ReadAsync(bytes, 0, (int)length);
+            if (bytes is not {Length: 0 })
+            {
+                _base64String = Convert.ToBase64String(bytes);
+                StateHasChanged();
+            }
+        }
+    }
+
+}

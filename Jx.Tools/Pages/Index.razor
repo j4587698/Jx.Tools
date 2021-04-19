@@ -1,41 +1,33 @@
 ﻿@page "/"
-@using Console = System.Console
-@inject TitleService TitleService
-<Row ItemsPerRow="ItemsPerRow.Two">
-<h2>文本比对</h2>
-<Button style="float:right;" OnClick="StartCompare">开始比对</Button>
-</Row>
-<Row ItemsPerRow="ItemsPerRow.Two" RowType="RowType.FormRow">
-    <Textarea @bind-Value="@_leftText" style="height: 35vh" ShowLabel="true" DisplayText="左侧文本"></Textarea>
-    <Textarea @bind-Value="@_rightText" style="height: 35vh" ShowLabel="true" DisplayText="右侧文本"></Textarea>
-<Textarea @bind-Value="@_leftResult" style="height: 35vh" ShowLabel="true" DisplayText="仅左侧存在"></Textarea>
-    <Textarea @bind-Value="@_rightResult" style="height: 35vh" ShowLabel="true" DisplayText="仅右侧存在"></Textarea>
-</Row>
 
-@code
-{
-    private string _leftText;
+<h3>工具导航</h3>
 
-    private string _rightText;
+<Table TItem="NavItem" Items="navItems" IsBordered="true" IsStriped="true">
+    <TableColumns>
+        <TableColumn @bind-Field="@context.Name" Text="工具">
+            <Template Context="value">
+                <a href="@((value.Row as NavItem)?.Url)">@value.Value</a>
+            </Template>
+        </TableColumn>
+        <TableColumn @bind-Field="@context.Description" Text="工具描述"></TableColumn>
+    </TableColumns>
+</Table>
 
-    private string _leftResult;
+@code {
 
-    private string _rightResult;
-
-    protected override void OnInitialized()
+    private List<NavItem> navItems = new List<NavItem>()
     {
-        base.OnInitialized();
-        TitleService.SetTitle("文本比对-常用工具集-Jx.Tools");
-    }
+        new NavItem(){Name = "文本比对", Description = "不按顺序比对两侧文本，显示不在另一边的文本内容。", Url = "/FileCompare"},
+        new NavItem(){Name = "图片转Base64", Description = "将图片转换为Base64文本，图片不保存到服务器，无需担心泄露问题。", Url = "/ImageToBase64"},
+    };
 
-    private void StartCompare()
+
+    class NavItem
     {
-        _rightText ??= "";
-        _leftText ??= "";
+        public string Name { get; set; }
 
-        var leftArray = _leftText.Split('\n');
-        var rightArray = _rightText.Split('\n');
-        _leftResult = string.Join('\n',leftArray.Where(x => !rightArray.Contains(x)));
-        _rightResult = string.Join('\n', rightArray.Where(x => !leftArray.Contains(x)));
-    }
+        public string Url { get; set; }
+
+        public string Description { get; set; }
+    } 
 }

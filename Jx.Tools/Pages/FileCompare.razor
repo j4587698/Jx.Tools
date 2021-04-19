@@ -1,0 +1,34 @@
+﻿@page "/FileCompare"
+
+<Row ItemsPerRow="ItemsPerRow.Two">
+<h2>文本比对</h2>
+<Button style="float:right;" OnClick="StartCompare">开始比对</Button>
+</Row>
+<Row ItemsPerRow="ItemsPerRow.Two" RowType="RowType.FormRow">
+    <Textarea @bind-Value="@_leftText" style="height: 35vh" ShowLabel="true" DisplayText="左侧文本"></Textarea>
+    <Textarea @bind-Value="@_rightText" style="height: 35vh" ShowLabel="true" DisplayText="右侧文本"></Textarea>
+<Textarea @bind-Value="@_leftResult" style="height: 35vh" ShowLabel="true" DisplayText="仅左侧存在"></Textarea>
+    <Textarea @bind-Value="@_rightResult" style="height: 35vh" ShowLabel="true" DisplayText="仅右侧存在"></Textarea>
+</Row>
+
+@code
+{
+    private string _leftText;
+
+    private string _rightText;
+
+    private string _leftResult;
+
+    private string _rightResult;
+
+    private void StartCompare()
+    {
+        _rightText ??= "";
+        _leftText ??= "";
+
+        var leftArray = _leftText.Split('\n');
+        var rightArray = _rightText.Split('\n');
+        _leftResult = string.Join('\n',leftArray.Where(x => !rightArray.Contains(x)));
+        _rightResult = string.Join('\n', rightArray.Where(x => !leftArray.Contains(x)));
+    }
+}

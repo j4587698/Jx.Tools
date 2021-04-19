@@ -18,7 +18,7 @@
     {
         if (".jpg;.png;.bmp;.gif;.jpeg".Split(';').Any(x => x == Path.GetExtension(arg.OriginFileName)))
         {
-            var stream = arg.File?.OpenReadStream();
+            var stream = arg.File?.OpenReadStream(maxAllowedSize:long.MaxValue);
             if (stream == null)
             {
                 return;

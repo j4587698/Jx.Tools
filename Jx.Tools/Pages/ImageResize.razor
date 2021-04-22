@@ -1,22 +1,24 @@
 ﻿@page "/ImageResize"
 
+@inject DownloadService DownloadService
+
 @using Jx.Tools.Components
+@using System.IO
 
 <Row ItemsPerRow="ItemsPerRow.Two">
     <h2>图片大小调整</h2>
     <Button style="float:right;" OnClick="Start">开始处理</Button>
 </Row>
 
-<Row RowType="RowType.FormRow">
-    <ImageResizeCompenent></ImageResizeCompenent>
-</Row>
+<ButtonUpload TValue="string" IsSingle="true" OnChange="FileUpload" BrowserButtonText="点击上传图片（不保存到服务器）" Accept="image/*" ShowProgress="true"></ButtonUpload>
 
-
-<Row ItemsPerRow="ItemsPerRow.Three">
-    
+<Row RowType="RowType.FormRow" style="height:40vh">
+    <ImageResizeComponent Url="@url"></ImageResizeComponent>
 </Row>
 
 @code {
+
+    private string url;
 
     private List<SelectedItem> _selectedItems = new List<SelectedItem>()
     {
@@ -61,6 +63,22 @@
     private void Start()
     {
         throw new NotImplementedException();
+    }
+
+    private async Task FileUpload(UploadFile arg)
+    {
+        if (".jpg;.png;.bmp;.gif;.jpeg".Split(';').Any(x => x == Path.GetExtension(arg.OriginFileName)))
+        {
+            var stream = arg.File?.OpenReadStream(maxAllowedSize:long.MaxValue);
+            if (stream == null)
+            {
+                return;
+            }
+            byte[] bytes = new byte[stream.Length];
+            await stream.ReadAsync(bytes, 0, bytes.Length);
+            url = await DownloadService.CreateUrlAsync($"image{Path.GetExtension(arg.OriginFileName)}", bytes, "image/jpeg");
+            StateHasChanged();
+        }
     }
 
 }

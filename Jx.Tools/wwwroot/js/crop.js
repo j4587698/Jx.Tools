@@ -1,8 +1,16 @@
 ﻿(function ($) {
     $.extend({
-        crop: function(el, method, param1, param2) {
+        crop: function(el) {
             var $el = $(el);
-            $el.cropper({viewMode:2});
+            $el.croppie({viewport:{
+                width: 400, 
+                height:400
+                }
+            });
+        },
+        doCrop: function (el, method){
+            var $el = $(el);
+            $el.croppie(method);
         }
     });
 })(jQuery);

@@ -4,6 +4,9 @@
 
 @using Jx.Tools.Components
 @using System.IO
+@using SixLabors.ImageSharp
+@using SixLabors.ImageSharp.Formats
+@using SixLabors.ImageSharp.Processing
 
 <Row ItemsPerRow="ItemsPerRow.Two">
     <h2>图片大小调整</h2>
@@ -12,9 +15,7 @@
 
 <ButtonUpload TValue="string" IsSingle="true" OnChange="FileUpload" BrowserButtonText="点击上传图片（不保存到服务器）" Accept="image/*" ShowProgress="true"></ButtonUpload>
 
-<Row RowType="RowType.FormRow" style="height:40vh">
-    <ImageResizeComponent Url="@url"></ImageResizeComponent>
-</Row>
+<ImageResizeComponent Url="@url"></ImageResizeComponent>
 
 @code {
 
@@ -60,6 +61,9 @@
         },
     };
 
+    private IImageFormat _imageFormat;
+    private Image _image;
+
     private void Start()
     {
         throw new NotImplementedException();
@@ -74,9 +78,19 @@
             {
                 return;
             }
+            MemoryStream memory = new MemoryStream();
+            Memory<byte> byteMemory = new Memory<byte>(new byte[stream.Length]);
+            await stream.ReadAsync(byteMemory);
+            await memory.WriteAsync(byteMemory);
+            memory.Position = 0;
+            var image = Image.Load(memory, out var decoder);
+            _image = image;
+            _imageFormat = decoder;
+
+            image.Mutate(x => x.Resize(image.Width / 2, image.Height / 2));
+            await image.SaveAsync(memory, decoder);
             byte[] bytes = new byte[stream.Length];
-            await stream.ReadAsync(bytes, 0, bytes.Length);
-            url = await DownloadService.CreateUrlAsync($"image{Path.GetExtension(arg.OriginFileName)}", bytes, "image/jpeg");
+            url = await DownloadService.CreateUrlAsync($"image{Path.GetExtension(arg.OriginFileName)}", memory.ToArray(), decoder.DefaultMimeType);
             StateHasChanged();
         }
     }

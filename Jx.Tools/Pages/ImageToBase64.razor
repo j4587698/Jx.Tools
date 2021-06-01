@@ -4,7 +4,7 @@
 
 <h3>图片转Base64</h3>
 
-<ButtonUpload TValue="string" Accept="image/*" DisplayText="选择要上传的文件" OnChange="@Upload" ShowLabel="true"></ButtonUpload>
+<ButtonUpload TValue="string" Accept="image/*" OnChange="@Upload" ShowLabel="true" ShowProgress="true" BrowserButtonText="点击上传图片（不保存到服务器）"></ButtonUpload>
 
 <Textarea style="height: 40vh" @bind-Value="@_base64String" readonly></Textarea>
 

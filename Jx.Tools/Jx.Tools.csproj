@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BootstrapBlazor" Version="5.0.26-beta05" />
-    <PackageReference Include="Furion" Version="1.19.3" />
+    <PackageReference Include="BootstrapBlazor" Version="5.0.27" />
+    <PackageReference Include="Furion" Version="2.0.11" />
     <PackageReference Include="Masuit.Tools.Abstractions" Version="2.4.3.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>

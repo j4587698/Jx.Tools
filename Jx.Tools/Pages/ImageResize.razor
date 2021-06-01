@@ -1,0 +1,98 @@
+﻿@page "/ImageResize"
+
+@inject DownloadService DownloadService
+
+@using Jx.Tools.Components
+@using System.IO
+@using SixLabors.ImageSharp
+@using SixLabors.ImageSharp.Formats
+@using SixLabors.ImageSharp.Processing
+
+<Row ItemsPerRow="ItemsPerRow.Two">
+    <h2>图片大小调整</h2>
+    <Button style="float:right;" OnClick="Start">开始处理</Button>
+</Row>
+
+<ButtonUpload TValue="string" IsSingle="true" OnChange="FileUpload" BrowserButtonText="点击上传图片（不保存到服务器）" Accept="image/*" ShowProgress="true"></ButtonUpload>
+
+<ImageResizeComponent Url="@url"></ImageResizeComponent>
+
+@code {
+
+    private string url;
+
+    private List<SelectedItem> _selectedItems = new List<SelectedItem>()
+    {
+        new SelectedItem()
+        {
+            Value = "295,143",
+            Text = "一寸",
+            GroupName = "常用尺寸"
+        },
+        new SelectedItem()
+        {
+            Value = "295,143",
+            Text = "一寸（295×413)",
+            GroupName = "常用尺寸"
+        },
+        new SelectedItem()
+        {
+            Value = "413,531",
+            Text = "小二寸（413×531）",
+            GroupName = "常用尺寸"
+        },
+        new SelectedItem()
+        {
+            Value = "295,143",
+            Text = "一寸",
+            GroupName = "常用尺寸"
+        },
+        new SelectedItem()
+        {
+            Value = "295,143",
+            Text = "一寸",
+            GroupName = "常用尺寸"
+        },
+        new SelectedItem()
+        {
+            Value = "295,143",
+            Text = "一寸",
+            GroupName = "常用尺寸"
+        },
+    };
+
+    private IImageFormat _imageFormat;
+    private Image _image;
+
+    private void Start()
+    {
+        throw new NotImplementedException();
+    }
+
+    private async Task FileUpload(UploadFile arg)
+    {
+        if (".jpg;.png;.bmp;.gif;.jpeg".Split(';').Any(x => x == Path.GetExtension(arg.OriginFileName)))
+        {
+            var stream = arg.File?.OpenReadStream(maxAllowedSize:long.MaxValue);
+            if (stream == null)
+            {
+                return;
+            }
+            MemoryStream memory = new MemoryStream();
+            Memory<byte> byteMemory = new Memory<byte>(new byte[stream.Length]);
+            await stream.ReadAsync(byteMemory);
+            await memory.WriteAsync(byteMemory);
+            memory.Position = 0;
+            var image = Image.Load(memory, out var decoder);
+            _image = image;
+            _imageFormat = decoder;
+
+            image.Mutate(x => x.Resize(image.Width / 2, image.Height / 2));
+            await image.SaveAsync(memory, decoder);
+            byte[] bytes = new byte[stream.Length];
+            url = await DownloadService.CreateUrlAsync($"image{Path.GetExtension(arg.OriginFileName)}", memory.ToArray(), decoder.DefaultMimeType);
+            StateHasChanged();
+        }
+    }
+
+}

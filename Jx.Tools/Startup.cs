@@ -29,6 +29,11 @@ namespace Jx.Tools
             services.AddRazorPages().AddInjectBase(false);
             services.AddServerSideBlazor();
             services.AddBootstrapBlazor();
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+                o.MaximumReceiveMessageSize = Int64.MaxValue;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

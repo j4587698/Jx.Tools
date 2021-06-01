@@ -1,16 +1,9 @@
 ﻿(function ($) {
     $.extend({
-        crop: function(el) {
+        crop: function(el, obj, args) {
             var $el = $(el);
-            $el.croppie({viewport:{
-                width: 400, 
-                height:400
-                }
-            });
-        },
-        doCrop: function (el, method){
-            var $el = $(el);
-            $el.croppie(method);
+            $el.croppie('destroy');
+            $el.croppie(args);
         }
     });
 })(jQuery);

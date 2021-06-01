@@ -7,6 +7,12 @@ namespace Jx.Tools.Components
     public partial class ImageResizeComponent: BootstrapComponentBase
     {
         private string _url;
+
+        private int _width;
+
+        private int _height;
+
+        private bool _isModify;
         
         private ElementReference Resize { get; set; }
         
@@ -15,24 +21,38 @@ namespace Jx.Tools.Components
             get => _url;
             set
             {
-                if (!string.IsNullOrWhiteSpace(_url))
+                if (!string.IsNullOrWhiteSpace(value))
                 {
                     _url = value;
-                    Interop.InvokeVoidAsync(this, Resize, "doCrop", "bind");
+                    _isModify = true;
                 }
                 
             } 
         }
-        
+
+        public int Width
+        {
+            get => _width;
+            set
+            {
+                if (value > 0)
+                {
+                    _width = value;
+                    _isModify = true;
+                }
+            }
+        }
+
         private JSInterop<ImageResizeComponent> Interop { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-            if (Interop == null)
+            Interop ??= new JSInterop<ImageResizeComponent>(JSRuntime);
+
+            if (_isModify)
             {
-                Interop = new JSInterop<ImageResizeComponent>(JSRuntime);
-                await Interop.InvokeVoidAsync(this, Resize, "crop");
+                await Interop.InvokeVoidAsync(this, Resize, "crop", new { Url = _url });
             }
         }
     }
